@@ -26,7 +26,8 @@ var EmptyCause = NewCause("")
 
 // Custom type for defining errors
 type Custom struct {
-	// code may also be used as the code string for msg
+	// code is the unique code for the error,
+	// it's also the format string used to create the msg
 	code string
 	// msg is the error value
 	msg string
@@ -68,17 +69,16 @@ func (e Custom) Error() string {
 	return e.msg
 }
 
-// Is return true if, the type of the error is ErrExampleType,
-// and the format matches the string passed into the constructor.
-// Think of the format string as the unique error number of code.
+// Is returns true if, the type of the error is Custom,
+// and code matches the format string passed into the constructor.
 // Do not call errors.Wrap or WithStack when creating errors below
 func (e Custom) Is(err error) bool {
 	v, ok := err.(Custom)
 	if !ok {
-		// Custom type must match for errors defined with this package
+		// Error not defined with this package
 		return false
 	}
-	// Code must match for specific error
+	// Code must match
 	return v.code == e.code
 }
 
